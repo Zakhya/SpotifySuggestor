@@ -1,0 +1,164 @@
+.body {
+  background-color: #27374D;
+  width: 98.7vw;
+  height: 100vh;
+  color: #DDE6ED;
+}
+*{
+  margin: 0;
+  padding: 0;
+}
+
+.suggestionsContainer{
+  display: flex;
+  flex-direction: column;
+  background-color: #27374D;
+  text-align: center;
+  padding-bottom: 15px;
+
+}
+
+.suggestionsTitle{
+  display: inline-block;
+  border-bottom: solid 1px #DDE6ED;
+  margin-block: 10px 25px;
+  font-size: 25px;
+}
+
+
+
+.suggestions{
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.cardContainer {
+  border: solid 1.5px #9DB2BF;
+  display: flex;
+  flex-direction: column;
+  background-color: #526D82;
+  flex-basis: calc(25% - 17px);
+  margin: 3px 7px;
+  text-align: center;
+}
+
+
+.card-name {
+  font-size: 17px;
+}
+
+.card-artist {
+  font-size: 11px;
+}
+
+.albumPic{
+  max-width: 110px;
+  max-height: 110px;
+}
+.albumPlayContainer{
+  width: 100%;
+  padding: 5px 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-left: 0px;
+}
+.playButtonWrapper {
+  margin-right: 10px;
+  margin-left: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.playButton{
+  font-size: 1.6rem;
+  margin-left: 4px;
+  margin-top: 1px;
+}
+.playButton:active{
+  color: #27374D;
+}
+.playButtonBackground {
+  border: solid 3.5px blue;
+  background-color: #3D5268;
+  border-radius: 50%;
+  padding: 11px 11px;
+}
+.playButtonBackground:active {
+  border: solid 3.5px #27374D;
+  background-color: #50c9d9;
+}
+.playButtonBackground:visited {
+  border: solid 3.5px #551A8B;
+  background-color: #27374D;
+}
+
+.seedsDisplayContainer{
+  margin-top: 15px;
+  margin-bottom: 25px;
+}
+.seedDisplay{
+  margin-top: 15px;
+  margin-bottom: 25px;
+}
+.seed:hover{
+  color: red;
+}
+.email{
+  color: #50c9d9;
+  font-size: 14px;
+}
+.email:visited{
+  color: #50c9d9;
+}
+
+.dropdown{
+  max-width: 100px;
+}
+.dropdownContainer {
+  display: flex;
+  justify-content: space-around;
+}
+
+.card-link {
+  list-style: none;
+}
+
+@media (max-width: 893px){
+  .cardContainer {
+    flex-basis: calc(33% - 17px);
+    margin: 3px 7px;
+  }
+  .card-name {
+    font-size: 12px;
+  }
+  
+  .card-artist {
+    font-size: 7px;
+  }
+  
+  .card-link {
+    font-size: 8px;
+    border-bottom: solid 1px #DDE6ED;
+  }
+  
+}
+
+
+@media (max-width: 641px){
+  .cardContainer {
+    flex-basis: calc(50% - 17px);
+    margin: 3px 7px;
+  }
+}
+@media (max-width: 426px){
+  .cardContainer {
+    flex-basis: calc(100% - 17px);
+    margin: 3px 7px;
+  }
+}

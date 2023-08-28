@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>My Spotify Profile</title>
+        <script src="https://kit.fontawesome.com/1f5aa88509.js" crossorigin="anonymous"></script>
+        <link rel="stylesheet" type="text/css" href="style.css">
+        <script src="script.js" type="module"></script>
+    </head>
+    <body class="body">
+          <section id="profile">
+          <h5>Logged in: <a id="email" class="email"></a></h5>
+          </section>
+          <div class="suggestionsContainer">
+            <div>
+              <p class="suggestionsTitle">Suggestions</p>
+            </div>
+            <div class="dropdownContainer">
+              <div>
+                <label for="topSongs">Top Songs</label>
+                <select id="topSongs" class="topSongs dropdown">
+                  <option value="none">none</option>
+                </select>
+              </div>
+              <div>
+                <label for="savedSongs">Saved Songs</label>
+                <select id="savedSongs" class="savedSongs dropdown">
+                  <option value="none">none</option>
+                </select>
+              </div>
+              <div>
+                <label for="topArtists">Top Artists</label>
+                <select id="topArtists" class="topArtists dropdown">
+                  <option value="none">none</option>
+                </select>
+              </div>
+              <div>
+                <label for="genres">Genres</label>
+                <select id="genres" class="genres dropdown">
+                  <option value="none">none</option>
+              </select> 
+              </div>
+              <div>
+                <button class="submitButton">Add Seeds</button>
+                <span>(5 Max)</span>
+              </div>
+            </div>
+            <div class="seedsDisplayContainer">
+              <p>Seeds:</p>
+              <div class="seedsDisplay"></div>
+              <button id="getRecomendationsButton" class="getRecomendationsButton">Get Recommendations</button>
+            </div>
+            <ul id="suggestions" class="suggestions">
+            </ul>
+          </div>
+    </body>
+</html>
