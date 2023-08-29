@@ -129,6 +129,38 @@
   list-style: none;
 }
 
+.numbersContainer{
+  display: flex;
+  justify-content: space-evenly;
+  flex-direction: column;
+}
+.numbersContainer .minMaxRow:nth-child(odd) {
+  background-color: #526D82;
+}
+
+.numberInput{
+  max-width: 50px;
+}
+
+.minMaxPart{
+  display: flex;
+}
+.minMaxEl{
+  margin-right: 16vw;
+}
+.minMaxRow{
+  display: flex;
+  justify-content: space-between;
+  padding-block:3.55px;
+  border-bottom: solid 1px #50c9d9;
+}
+.minMaxRow:nth-child(1){
+  border-top: solid 1px #50c9d9;
+}
+.endEl{
+  margin-right: 0px;
+}
+
 @media (max-width: 893px){
   .cardContainer {
     flex-basis: calc(33% - 17px);

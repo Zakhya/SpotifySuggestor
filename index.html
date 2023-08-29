@@ -52,6 +52,263 @@
               <div class="seedsDisplay"></div>
               <button id="getRecomendationsButton" class="getRecomendationsButton">Get Recommendations</button>
             </div>
+
+            <div class="numbersContainer">
+              <div class="minMaxRow">
+                <p>Acousticness</p>
+                <div class="minMaxPart">
+                  <div class="minMaxEl">
+                    <label for="min_acousticness">Min</label>
+                    <input id="min_acousticness" class="numberInput" type="number" step="0.1" min="0" max="1"/>
+                  </div>
+                  <div class="minMaxEl">
+                    <label for="max_acousticness">Max</label>
+                    <input id="max_acousticness" class="numberInput" type="number" step="0.1" min="0" max="1"/>
+                  </div>
+                  <div class="minMaxEl endEl">
+                    <label for="target_acousticness">Target</label>
+                    <input id="target_acousticness" class="numberInput" type="number" step="0.1" min="0" max="1"/>
+                  </div>
+                </div>
+            </div>
+
+            <div class="minMaxRow">
+              <p>Danceability</p>
+              <div class="minMaxPart">
+                <div class="minMaxEl">
+                  <label for="min_danceability">Min</label>
+                  <input id="min_danceability" class="numberInput" type="number" step="0.1" min="0" max="1"/>
+                </div>
+                <div class="minMaxEl">
+                  <label for="max_danceability">Max</label>
+                  <input id="max_danceability" class="numberInput" type="number" step="0.1" min="0" max="1"/>
+                </div>
+                <div class="minMaxEl endEl">
+                  <label for="target_danceability">Target</label>
+                  <input id="target_danceability" class="numberInput" type="number" step="0.1" min="0" max="1"/>
+                </div>
+              </div>
+            </div>
+
+              
+            <div class="minMaxRow">
+              <p>Energy</p>
+              <div class="minMaxPart">
+                <div class="minMaxEl">
+                  <label for="min_energy">Min</label>
+                  <input id="min_energy" class="numberInput" type="number" step="0.1" min="0" max="1"/>
+                </div>
+                <div class="minMaxEl">
+                  <label for="max_energy">Max</label>
+                  <input id="max_energy" class="numberInput" type="number" step="0.1" min="0" max="1"/>
+                </div>
+                <div class="minMaxEl endEl">
+                  <label for="target_energy">Target</label>
+                  <input id="target_energy" class="numberInput" type="number" step="0.1" min="0" max="1"/>
+                </div>
+              </div>
+            </div>
+
+              <div class="minMaxRow">
+                <p>Instrumentalness</p>
+                <div class="minMaxPart">
+                  <div class="minMaxEl">
+                    <label for="min_instrumentalness">Min</label>
+                    <input id="min_instrumentalness" class="numberInput" type="number" step="0.1" min="0" max="1"/>
+                  </div>
+                  <div class="minMaxEl">
+                    <label for="max_instrumentalness">Max</label>
+                    <input id="max_instrumentalness" class="numberInput" type="number" step="0.1" min="0" max="1"/>
+                  </div>                
+                  <div class="minMaxEl endEl">
+                    <label for="target_instrumentalness">Target</label>
+                    <input id="target_instrumentalness" class="numberInput" type="number" step="0.1" min="0" max="1"/>
+                  </div>                
+                </div>
+              </div>
+
+            <div class="minMaxRow">
+              <p>Key</p>
+              <div class="minMaxPart">
+                <div class="minMaxEl">
+                  <label for="min_key">Min</label>
+                  <input id="min_key" class="numberInput" type="number" step="1" min="0" max="11"/>
+                </div>
+                <div class="minMaxEl">
+                  <label for="max_key">Max</label>
+                  <input id="max_key" class="numberInput" type="number" step="1" min="0" max="11"/>
+                </div>                
+                <div class="minMaxEl endEl">
+                  <label for="target_key">Target</label>
+                  <input id="target_key" class="numberInput" type="number" step="1" min="0" max="11"/>
+                </div>                
+              </div>
+            </div>
+
+            <div class="minMaxRow">
+              <p>Liveness</p>
+              <div class="minMaxPart">
+                <div class="minMaxEl">
+                  <label for="min_liveness">Min</label>
+                  <input id="min_liveness" class="numberInput" type="number" step="0.1" min="0" max="1"/>
+                </div>
+                <div class="minMaxEl">
+                  <label for="max_liveness">Max</label>
+                  <input id="max_liveness" class="numberInput" type="number" step="0.1" min="0" max="1"/>
+                </div>                
+                <div class="minMaxEl endEl">
+                  <label for="target_liveness">Target</label>
+                  <input id="target_liveness" class="numberInput" type="number" step="0.1" min="0" max="1"/>
+                </div>                
+              </div>
+            </div>
+
+            <div class="minMaxRow">
+              <p>Loudness</p>
+              <div class="minMaxPart">
+                <div class="minMaxEl">
+                  <label for="min_loudness">Min</label>
+                  <input id="min_loudness" class="numberInput" type="number" step="0.1" min="0" max="1"/>
+                </div>
+                <div class="minMaxEl">
+                  <label for="max_loudness">Max</label>
+                  <input id="max_loudness" class="numberInput" type="number" step="0.1" min="0" max="1"/>
+                </div>                
+                <div class="minMaxEl endEl">
+                  <label for="target_loudness">Target</label>
+                  <input id="target_loudness" class="numberInput" type="number" step="0.1" min="0" max="1"/>
+                </div>                
+              </div>
+            </div>
+              
+            <div class="minMaxRow">
+              <p>Mode</p>
+              <div class="minMaxPart">
+                <div class="minMaxEl">
+                  <label for="min_mode">Min</label>
+                  <input id="min_mode" class="numberInput" type="number" step="0.1" min="0" max="1"/>
+                </div>
+                <div class="minMaxEl">
+                  <label for="max_mode">Max</label>
+                  <input id="max_mode" class="numberInput" type="number" step="0.1" min="0" max="1"/>
+                </div>  
+                <div class="minMaxEl endEl">
+                  <label for="target_mode">Target</label>
+                  <input id="target_mode" class="numberInput" type="number" step="0.1" min="0" max="1"/>
+                </div>                
+              </div>
+            </div>
+              
+            <div class="minMaxRow">
+                <p>Popularity</p>
+                <div class="minMaxPart">
+                  <div class="minMaxEl">
+                    <label for="min_popularity">Min</label>
+                    <input id="min_popularity" class="numberInput" type="number" step="1" min="0" max="100"/>
+                  </div>
+                  <div class="minMaxEl">
+                    <label for="max_popularity">Max</label>
+                    <input id="max_popularity" class="numberInput" type="number" step="1" min="0" max="100"/>
+                  </div>
+                  <div class="minMaxEl endEl">
+                    <label for="target_popularity">Target</label>
+                    <input id="target_popularity" class="numberInput" type="number" step="1" min="0" max="100"/>
+                  </div>                
+                </div>
+            </div>
+              
+            <div class="minMaxRow">
+              <p>Speechiness</p>
+              <div class="minMaxPart">
+                <div class="minMaxEl">
+                  <label for="min_speechiness">Min</label>
+                  <input id="min_speechiness" class="numberInput" type="number" step="0.1" min="0" max="1"/>
+                </div>
+                <div class="minMaxEl">
+                  <label for="max_speechiness">Max</label>
+                  <input id="max_speechiness" class="numberInput" type="number" step="0.1" min="0" max="1"/>
+                </div>                
+                <div class="minMaxEl endEl">
+                  <label for="target_speechiness">Target</label>
+                  <input id="target_speechiness" class="numberInput" type="number" step="0.1" min="0" max="1"/>
+                </div>                
+              </div>
+            </div>
+              
+            <div class="minMaxRow">
+              <p>Tempo</p>
+              <div class="minMaxPart">
+                <div class="minMaxEl">
+                  <label for="min_tempo">Min</label>
+                  <input id="min_tempo" class="numberInput" type="number" step="1" min="30" max="250"/>
+                </div>
+                <div class="minMaxEl">
+                  <label for="max_tempo">Max</label>
+                  <input id="max_tempo" class="numberInput" type="number" step="1" min="30" max="250"/>
+                </div>
+                <div class="minMaxEl endEl">
+                  <label for="target_tempo">Target</label>
+                  <input id="target_tempo" class="numberInput" type="number" step="1" min="30" max="250"/>
+                </div>
+              </div>
+            </div>
+              
+            <div class="minMaxRow">
+              <p>Time Signiture</p>
+              <div class="minMaxPart">
+                <div class="minMaxEl">
+                  <label for="min_time_signature">Min</label>
+                  <input id="min_time_signature" class="numberInput" type="number" step="0.1" min="0" max="11"/>
+                </div>
+                <div class="minMaxEl">
+                  <label for="max_time_signature">Max</label>
+                  <input id="max_time_signature" class="numberInput" type="number" step="0.1" min="0" max="11"/>
+                </div>                
+                <div class="minMaxEl endEl">
+                  <label for="target_time_signature">Target</label>
+                  <input id="target_time_signature" class="numberInput" type="number" step="0.1" min="0" max="11"/>
+                </div>                
+              </div>
+            </div>
+              
+            <div class="minMaxRow">
+              <p>Valence</p>
+              <div class="minMaxPart">
+                <div class="minMaxEl">
+                  <label for="min_valence">Min</label>
+                  <input id="min_valence" class="numberInput" type="number" step="0.1" min="0" max="1"/>
+                </div>
+                <div class="minMaxEl">
+                  <label for="max_valence">Max</label>
+                  <input id="max_valence" class="numberInput" type="number" step="0.1" min="0" max="1"/>
+                </div>                
+                <div class="minMaxEl endEl">
+                  <label for="target_valence">Target</label>
+                  <input id="target_valence" class="numberInput" type="number" step="0.1" min="0" max="1"/>
+                </div>                
+              </div>
+            </div>
+
+            <div class="minMaxRow">
+              <p>Duration (seconds) </p>
+              <div class="minMaxPart">
+                <div class="minMaxEl">
+                  <label for="min_duration_ms">Min</label>
+                  <input id="min_duration_ms" class="numberInput" type="number" step="1" min="0" max="10000"/>
+                </div>
+                <div class="minMaxEl">
+                  <label for="max_duration_ms">Max</label>
+                  <input id="max_duration_ms" class="numberInput" type="number" step="1" min="0" max="10000"/>
+                </div>             
+                <div class="minMaxEl endEl">
+                  <label for="target_duration_ms">Target</label>
+                  <input id="target_duration_ms" class="numberInput" type="number" step="1" min="0" max="10000"/>
+                </div>                
+              </div>
+            </div>
+
+            </div>
+
             <ul id="suggestions" class="suggestions">
             </ul>
           </div>

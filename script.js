@@ -16,7 +16,6 @@ let selectedSeeds = {
   artist: [],
   genre: []
 }
-let seedDisplay = []
 let accessToken
 let profile
 
