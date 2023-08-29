@@ -18,6 +18,7 @@ let seedDisplay = []
 let accessToken
 let profile
 
+let seedDiv = document.querySelector('.seedsDisplay')
 const genresToListButton = document.querySelector('.submitButton');
 const topSongsDropdown = document.getElementById('topSongs')
 const topArtistsDropdown = document.getElementById('topArtists')
@@ -123,11 +124,8 @@ genresToListButton.addEventListener('click', function() {
     selectedSeeds.genre.push(genresDropdown.value)
     seedDisplay.push(genresDropdown.value)
   }
-
-  console.log('selectedSeeds:', selectedSeeds);
-  // Optional: Update the "seedsDisplay" with the selected values
+   // Optional: Update the "seedsDisplay" with the selected values
   
-    let seedDiv = document.querySelector('.seedsDisplay')
     seedDiv.textContent = ``
     seedDisplay.forEach((el, i) => {
       const span = document.createElement('span')
@@ -147,7 +145,6 @@ genresToListButton.addEventListener('click', function() {
 });
 
 const filterAndDisplaySeeds = () => {
-  let seedDiv = document.querySelector('.seedsDisplay')
   seedDiv.textContent = ``
     seedDisplay.forEach((el, i) => {
       const span = document.createElement('span')
@@ -158,6 +155,9 @@ const filterAndDisplaySeeds = () => {
       }
       span.addEventListener('click', function(){
         seedDisplay = seedDisplay.filter(e => e !== el)
+        selectedSeeds.forEach((a) => {
+          ///////////////////
+        })
         filterAndDisplaySeeds()
       })
       seedDiv.appendChild(span)
@@ -299,31 +299,62 @@ async function createPlaylist(token) {
 async function get50Recommendations(token, selectedSeeds) {
  let url = `https://api.spotify.com/v1/recommendations?limit=50`
  let firstArtist = true
+ let firstGenre = true
+ let firstTrack = true
+ console.log('selectedSeeds', selectedSeeds)
  selectedSeeds.artist.forEach(el => {
    if(firstArtist){
      url += `&seed_artists=${el.id}`
-     selectedSeeds = selectedSeeds.artist.filter(el => el.id !== selectedSeeds.artist.id)
+     selectedSeeds.artist = selectedSeeds.artist.filter(item => item !== el)
      firstArtist = false
     } else {
       url += `,${el.id}`
-      selectedSeeds = selectedSeeds.artist.filter(el => el.id !== selectedSeeds.artist.id)
+      selectedSeeds.artist = selectedSeeds.artist.filter(item => item !== el)
     }
   })
-  
-  for(let i = 0; i < selectedSeeds.length; i++){
-    let firstArtist = true
-    if(selectedSeeds[i].genre !== undefined && firstArtist){
-      url += `&seed_genres=${selectedSeeds[i].genre}`
-      selectedSeeds = selectedSeeds.filter(el => el.genre !== selectedSeeds[i].genre)
-      firstArtist = false
-    } else if(selectedSeeds[i].genre !== undefined){
-      url += `,${selectedSeeds[i].genre}`
-      selectedSeeds = selectedSeeds.filter(el => el.genre !== selectedSeeds[i].genre)
+  console.log('selectedSeeds:', selectedSeeds);
+
+ selectedSeeds.genre.forEach(el => {
+   if(firstGenre){
+     url += `&seed_genre=${el}`
+     selectedSeeds.genre = selectedSeeds.genre.filter(item => item !== el)
+     firstGenre = false
+    } else {
+      url += `,${el}`
+      selectedSeeds.genre = selectedSeeds.genre.filter(item => item !== el)
     }
-  }
+  })
+  console.log('selectedSeeds:', selectedSeeds);
+
+  selectedSeeds.topSong.forEach(el => {
+    if(firstTrack){
+      url += `&seed_tracks=${el.id}`
+      selectedSeeds.topSong = selectedSeeds.topSong.filter(item => item !== el)
+      firstTrack = false
+     } else {
+
+       url += `,${el.id}`
+       selectedSeeds.topSong = selectedSeeds.topSong.filter(item => item !== el)
+     }
+   })
+   console.log('selectedSeeds:', selectedSeeds);
+
+  selectedSeeds.savedSong.forEach(el => {
+    if(firstTrack){
+      url += `&seed_tracks=${el.id}`
+      selectedSeeds.savedSong = selectedSeeds.savedSong.filter(item => item !== el)
+      firstTrack = false
+     } else {
+       url += `,${el.id}`
+       console.log('selectedSeeds', selectedSeeds.artist)
+       selectedSeeds.savedSong = selectedSeeds.savedSong.filter(item => item !== el)
+     }
+   })
   
   console.log(url)
   console.log('selectedSeeds:', selectedSeeds);
+  seedDisplay = []
+  .textContent = ''
 
 
 
