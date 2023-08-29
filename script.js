@@ -1,3 +1,5 @@
+import { getAccessToken, redirectToAuthCodeFlow} from "./verify";
+import { get50Recommendations, getGenres, fetchAllSavedSongs, fetchTop50Songs, fetchTop50Artists, fetchProfile, fetchPlaylists } from "./asyncCalls";
 const clientId = "6fd7da8323b5478aafa52dc629d650f4"; // Replace with your client ID
 const params = new URLSearchParams(window.location.search);
 const code = params.get("code");
@@ -25,40 +27,6 @@ const topArtistsDropdown = document.getElementById('topArtists')
 const savedSongsDropdown = document.getElementById('savedSongs')
 const genresDropdown = document.getElementById('genres')
 const getRecomendationsButton = document.getElementById('getRecomendationsButton')
-
-const populateStartingUI = (profile) => {
-  let emailDisplayLink = document.getElementById("email")
-  emailDisplayLink.innerText = profile.email;
-  emailDisplayLink.setAttribute('href', profile.external_urls.spotify)
-
-  savedSongs.forEach(song => {
-    const option = document.createElement('option')
-    option.setAttribute('value', song.name)
-    option.innerHTML = song.name
-    savedSongsDropdown.appendChild(option)
-  })
-
-  genres.forEach(el => {
-    const option = document.createElement('option')
-    option.setAttribute('value', el)
-    option.innerHTML = el
-    genresDropdown.appendChild(option)
-  })
-
-  top50Tracks.forEach(el => {
-    const option = document.createElement('option')
-    option.setAttribute('value', el.name)
-    option.innerHTML = `${el.name}`
-    topSongsDropdown.appendChild(option)
-  })
-
-  top50Artists.forEach(el => {
-      const option = document.createElement('option')
-      option.setAttribute('value', el.name)
-      option.innerHTML = `${el.name}`
-      topArtistsDropdown.appendChild(option)
-  })
-}
 
 getRecomendationsButton.addEventListener('click', async function(){
   console.log('selectedSeeds:', selectedSeeds);
@@ -96,79 +64,41 @@ getRecomendationsButton.addEventListener('click', async function(){
 })
 
 genresToListButton.addEventListener('click', function() {
-  if(topSongsDropdown.value !== 'none' && !seedDisplay.includes(topSongsDropdown.value) && seedDisplay.length < 5){
+  if(topSongsDropdown.value !== 'none' && !selectedSeeds.topSong.some(songObject => songObject.song === topSongsDropdown.value) && seedDiv.getElementsByTagName('span').length <= 5){
     selectedSeeds.topSong.push({
       song: topSongsDropdown.value,
       id: top50Tracks.find(track => track.name === topSongsDropdown.value).id
     });
-    seedDisplay.push(topSongsDropdown.value)
   }
   
-  if(savedSongsDropdown.value !== 'none' && !seedDisplay.includes(savedSongsDropdown.value) && seedDisplay.length < 5){
+  if(savedSongsDropdown.value !== 'none' && !selectedSeeds.savedSong.some(songObject => songObject.song === savedSongsDropdown.value) && seedDiv.getElementsByTagName('span').length <= 5){
     selectedSeeds.savedSong.push({
       song: savedSongsDropdown.value,
       id: savedSongs.find(track => track.name === savedSongsDropdown.value).id
     });
-    seedDisplay.push(savedSongsDropdown.value)
   }
 
-  if(topArtistsDropdown.value !== 'none' && !seedDisplay.includes(topArtistsDropdown.value) && seedDisplay.length < 5){
+  if(topArtistsDropdown.value !== 'none' && !selectedSeeds.artist.some(songObject => songObject.artist === topArtistsDropdown.value) && seedDiv.getElementsByTagName('span').length <= 5){
     selectedSeeds.artist.push({
       artist: topArtistsDropdown.value,
       id: top50Artists.find(track => track.name === topArtistsDropdown.value).id
     });
-    seedDisplay.push(topArtistsDropdown.value)
   }
 
-  if(genresDropdown.value !== 'none' && !seedDisplay.includes(genresDropdown.value) && seedDisplay.length < 5){
+  if(genresDropdown.value !== 'none' && !selectedSeeds.genre.includes(genresDropdown.value) && seedDiv.getElementsByTagName('span').length <= 5){
     selectedSeeds.genre.push(genresDropdown.value)
-    seedDisplay.push(genresDropdown.value)
   }
-   // Optional: Update the "seedsDisplay" with the selected values
-  
-    seedDiv.textContent = ``
-    seedDisplay.forEach((el, i) => {
-      const span = document.createElement('span')
-      span.setAttribute('class', 'seed')
-      if(seedDisplay[i + 1] === undefined){
-        span.textContent = `  ${el}`
-      } else {
-        span.textContent = `  ${el},`
-      }
-      span.addEventListener('click', function(){
-        seedDisplay = seedDisplay.filter(e => e !== el)
-        filterAndDisplaySeeds()
-      })
-      seedDiv.appendChild(span)
-      i++
-    })
-});
+     
+    console.log(selectedSeeds)
+    filterAndDisplaySeeds()
 
-const filterAndDisplaySeeds = () => {
-  seedDiv.textContent = ``
-    seedDisplay.forEach((el, i) => {
-      const span = document.createElement('span')
-      if(seedDisplay[i + 1] === undefined){
-        span.textContent = `  ${el}`
-      } else {
-        span.textContent = `  ${el},`
-      }
-      span.addEventListener('click', function(){
-        seedDisplay = seedDisplay.filter(e => e !== el)
-        selectedSeeds.forEach((a) => {
-          ///////////////////
-        })
-        filterAndDisplaySeeds()
-      })
-      seedDiv.appendChild(span)
-      i++
-    })
-}
+
+});
 
 
 
 if (!code) {
-    redirectToAuthCodeFlow(clientId);
+  redirectToAuthCodeFlow(clientId);
 } else {
     accessToken = await getAccessToken(clientId, code);
     profile = await fetchProfile(accessToken);
@@ -202,293 +132,148 @@ if (!code) {
     // console.log(newPlaylistID)
     populateStartingUI(profile)
 
-}
-
-export async function redirectToAuthCodeFlow(clientId) {
-  const verifier = generateCodeVerifier(128);
-  const challenge = await generateCodeChallenge(verifier);
-
-  localStorage.setItem("verifier", verifier);
-
-  const params = new URLSearchParams();
-  params.append("client_id", clientId);
-  params.append("response_type", "code");
-  params.append("redirect_uri", "http://localhost:5173/callback");
-  params.append("scope", "user-read-private user-read-email playlist-modify-private playlist-read-private user-library-read user-top-read");
-  params.append("code_challenge_method", "S256");
-  params.append("code_challenge", challenge);
-
-  document.location = `https://accounts.spotify.com/authorize?${params.toString()}`
-}
-
-function generateCodeVerifier(length) {
-  let text = '';
-  let possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-
-  for (let i = 0; i < length; i++) {
-      text += possible.charAt(Math.floor(Math.random() * possible.length));
   }
-  return text;
-}
 
-async function generateCodeChallenge(codeVerifier) {
-  const data = new TextEncoder().encode(codeVerifier);
-  const digest = await window.crypto.subtle.digest('SHA-256', data);
-  return btoa(String.fromCharCode.apply(null, [...new Uint8Array(digest)]))
-      .replace(/\+/g, '-')
-      .replace(/\//g, '_')
-      .replace(/=+$/, '');
-}
-
-export async function getAccessToken(clientId, code) {
-  const verifier = localStorage.getItem("verifier");
-
-  const params = new URLSearchParams();
-  params.append("client_id", clientId);
-  params.append("grant_type", "authorization_code");
-  params.append("code", code);
-  params.append("redirect_uri", "http://localhost:5173/callback");
-  params.append("code_verifier", verifier);
-
-  const result = await fetch("https://accounts.spotify.com/api/token", {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: params
-  });
-
-  const { access_token } = await result.json();
-  return access_token;
-}
-
-async function fetchProfile(token) {
-  const result = await fetch("https://api.spotify.com/v1/me", {
-    method: "GET", headers: { Authorization: `Bearer ${token}` }
-});
-
-return await result.json();
-}
-
-async function fetchPlaylists(token) {
-  const result = await fetch("https://api.spotify.com/v1/me/playlists", {
-    method: "GET", headers: { Authorization: `Bearer ${token}` }
-});
-
-return await result.json();
-}
-
-async function createPlaylist(token) {
-  const requestBody = {
-      "name": "New Playlist",
-      "description": "New playlist description",
-      "public": false
-  };
-
-  const response = await fetch(`https://api.spotify.com/v1/users/${userID}/playlists`, {
-      method: "POST",
-      headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json"
-      },
-      body: JSON.stringify(requestBody)
-  });
-
-  const data = await response.json();
-  return data.id;  // This will return the ID of the newly created playlist.
-}
-
-async function get50Recommendations(token, selectedSeeds) {
- let url = `https://api.spotify.com/v1/recommendations?limit=50`
- let firstArtist = true
- let firstGenre = true
- let firstTrack = true
- console.log('selectedSeeds', selectedSeeds)
- selectedSeeds.artist.forEach(el => {
-   if(firstArtist){
-     url += `&seed_artists=${el.id}`
-     selectedSeeds.artist = selectedSeeds.artist.filter(item => item !== el)
-     firstArtist = false
-    } else {
-      url += `,${el.id}`
-      selectedSeeds.artist = selectedSeeds.artist.filter(item => item !== el)
-    }
-  })
-  console.log('selectedSeeds:', selectedSeeds);
-
- selectedSeeds.genre.forEach(el => {
-   if(firstGenre){
-     url += `&seed_genre=${el}`
-     selectedSeeds.genre = selectedSeeds.genre.filter(item => item !== el)
-     firstGenre = false
-    } else {
-      url += `,${el}`
-      selectedSeeds.genre = selectedSeeds.genre.filter(item => item !== el)
-    }
-  })
-  console.log('selectedSeeds:', selectedSeeds);
-
-  selectedSeeds.topSong.forEach(el => {
-    if(firstTrack){
-      url += `&seed_tracks=${el.id}`
-      selectedSeeds.topSong = selectedSeeds.topSong.filter(item => item !== el)
-      firstTrack = false
-     } else {
-
-       url += `,${el.id}`
-       selectedSeeds.topSong = selectedSeeds.topSong.filter(item => item !== el)
-     }
-   })
-   console.log('selectedSeeds:', selectedSeeds);
-
-  selectedSeeds.savedSong.forEach(el => {
-    if(firstTrack){
-      url += `&seed_tracks=${el.id}`
-      selectedSeeds.savedSong = selectedSeeds.savedSong.filter(item => item !== el)
-      firstTrack = false
-     } else {
-       url += `,${el.id}`
-       console.log('selectedSeeds', selectedSeeds.artist)
-       selectedSeeds.savedSong = selectedSeeds.savedSong.filter(item => item !== el)
-     }
-   })
+  function populateStartingUI(profile){
+    let emailDisplayLink = document.getElementById("email")
+    emailDisplayLink.innerText = profile.email;
+    emailDisplayLink.setAttribute('href', profile.external_urls.spotify)
   
-  console.log(url)
-  console.log('selectedSeeds:', selectedSeeds);
-  seedDisplay = []
-  .textContent = ''
-
-
-
-  const result = await fetch(url, {
-    method: "GET", headers: { Authorization: `Bearer ${token}` }
-});
-
-return await result.json();
-}
-
-async function getGenres(token) {
-  const result = await fetch(`https://api.spotify.com/v1/recommendations/available-genre-seeds`, {
-    method: "GET", headers: { Authorization: `Bearer ${token}` }
-});
-
-return await result.json();
-} 
-
-
-async function fetchAllSavedSongs(token) {
-  let offset = 0;
-  const limit = 50; // This is the maximum number of items the API returns in one call.
-  let savedSongs = [];
-  let shouldContinueFetching = true;
-
-  while (shouldContinueFetching) {
-      try {
-          const response = await fetch(`https://api.spotify.com/v1/me/tracks?limit=${limit}&offset=${offset}`, {
-              headers: {
-                  Authorization: `Bearer ${token}`
-              }
-          });
-
-          if (!response.ok) {
-              throw new Error(`HTTP error! Status: ${response.status}`);
-          }
-
-          const data = await response.json();
-
-          const songs = data.items.map(item => ({
-              name: item.track.name,
-              id: item.track.id
-          }));
-
-          savedSongs = [...savedSongs, ...songs];
-
-          // Check if there are more songs to fetch
-          if (data.items.length < limit) {
-              shouldContinueFetching = false;
-          } else {
-              offset += limit;
-          }
-
-      } catch (error) {
-          console.error("Failed to fetch songs:", error);
-          shouldContinueFetching = false; // Stop the loop in case of an error
-      }
+    savedSongs.forEach(song => {
+      const option = document.createElement('option')
+      option.setAttribute('value', song.name)
+      option.innerHTML = song.name
+      savedSongsDropdown.appendChild(option)
+    })
+  
+    genres.forEach(el => {
+      const option = document.createElement('option')
+      option.setAttribute('value', el)
+      option.innerHTML = el
+      genresDropdown.appendChild(option)
+    })
+  
+    top50Tracks.forEach(el => {
+      const option = document.createElement('option')
+      option.setAttribute('value', el.name)
+      option.innerHTML = `${el.name}`
+      topSongsDropdown.appendChild(option)
+    })
+  
+    top50Artists.forEach(el => {
+        const option = document.createElement('option')
+        option.setAttribute('value', el.name)
+        option.innerHTML = `${el.name}`
+        topArtistsDropdown.appendChild(option)
+    })
   }
-
-  return savedSongs;
-}
-
-
-async function fetchTop50Songs(token) {
-  const result = await fetch("https://api.spotify.com/v1/me/top/tracks?time_range=medium_term&limit=50", {
-    method: "GET", headers: { Authorization: `Bearer ${token}` }
-});
-
-return await result.json();
-}
-
-async function fetchTop50Artists(token) {
-  const result = await fetch("https://api.spotify.com/v1/me/top/artists?time_range=medium_term&limit=50", {
-    method: "GET", headers: { Authorization: `Bearer ${token}` }
-});
-
-return await result.json();
-}
 
 function populateUI(profile) {
     
-    let listEl = document.getElementById("suggestions")
+  let listEl = document.getElementById("suggestions")
 
-    finalRecomendationsList.map((liEl) => {
-      let cardContainer = document.createElement('div')
-      cardContainer.addEventListener('click', function(){
-        if(liEl.activated === false){
-          cardContainer.style.backgroundColor = "#50c9d9"
-          liEl = {
-            activated: true,
-          }
-        } else {
-          cardContainer.style.backgroundColor = "#526D82"
-          liEl = {
-            activated: false,
-          }
+  finalRecomendationsList.map((liEl) => {
+    let cardContainer = document.createElement('div')
+    cardContainer.addEventListener('click', function(){
+      if(liEl.activated === false){
+        cardContainer.style.backgroundColor = "#50c9d9"
+        liEl = {
+          activated: true,
         }
-        console.log(finalRecomendationsList)
-      })
-      let nameEl = document.createElement('span')
-      let artistEl = document.createElement('span')
-      let playButtonWrapper = document.createElement('a')
-      let playButton = document.createElement('i')
-      let playButtonBackground = document.createElement('a')
-      let albumPic = document.createElement('img')
-      let albumAndPlayContainer = document.createElement('div')
-
-
-      playButtonBackground.setAttribute('class', 'playButtonBackground')
-      playButton.setAttribute('class', 'fa-solid fa-play playButton')
-      albumAndPlayContainer.setAttribute('class', 'albumPlayContainer')
-      albumPic.setAttribute('src', liEl.picURL)
-      albumPic.setAttribute('class', 'albumPic')
-      cardContainer.setAttribute('class', 'cardContainer')
-      nameEl.setAttribute('class', 'card-name')
-      artistEl.setAttribute('class', 'card-artist')
-      playButtonBackground.setAttribute('href', liEl.previewURL)
-      playButtonBackground.setAttribute('target', '_blank')      
-      playButtonWrapper.setAttribute('class', 'playButtonWrapper')      
-
-      nameEl.innerText = liEl.name
-      artistEl.innerText = liEl.artists
-      
-      playButtonBackground.appendChild(playButton)
-      playButtonWrapper.appendChild(playButtonBackground)
-      albumAndPlayContainer.appendChild(albumPic)
-      albumAndPlayContainer.appendChild(playButtonWrapper)
-      cardContainer.appendChild(nameEl)
-      cardContainer.appendChild(artistEl)
-      cardContainer.appendChild(albumAndPlayContainer)
-      listEl.append(cardContainer)
+      } else {
+        cardContainer.style.backgroundColor = "#526D82"
+        liEl = {
+          activated: false,
+        }
+      }
+      console.log(finalRecomendationsList)
     })
+    let nameEl = document.createElement('span')
+    let artistEl = document.createElement('span')
+    let playButtonWrapper = document.createElement('a')
+    let playButton = document.createElement('i')
+    let playButtonBackground = document.createElement('a')
+    let albumPic = document.createElement('img')
+    let albumAndPlayContainer = document.createElement('div')
     
 
-
+    playButtonBackground.setAttribute('class', 'playButtonBackground')
+    playButton.setAttribute('class', 'fa-solid fa-play playButton')
+    albumAndPlayContainer.setAttribute('class', 'albumPlayContainer')
+    albumPic.setAttribute('src', liEl.picURL)
+    albumPic.setAttribute('class', 'albumPic')
+    cardContainer.setAttribute('class', 'cardContainer')
+    nameEl.setAttribute('class', 'card-name')
+    artistEl.setAttribute('class', 'card-artist')
+    playButtonBackground.setAttribute('href', liEl.previewURL)
+    playButtonBackground.setAttribute('target', '_blank')      
+    playButtonWrapper.setAttribute('class', 'playButtonWrapper')      
+    
+    nameEl.innerText = liEl.name
+    artistEl.innerText = liEl.artists
+    
+    playButtonBackground.appendChild(playButton)
+    playButtonWrapper.appendChild(playButtonBackground)
+    albumAndPlayContainer.appendChild(albumPic)
+    albumAndPlayContainer.appendChild(playButtonWrapper)
+    cardContainer.appendChild(nameEl)
+    cardContainer.appendChild(artistEl)
+    cardContainer.appendChild(albumAndPlayContainer)
+    listEl.append(cardContainer)
+  })
 }
 
+function filterAndDisplaySeeds(){
+  seedDiv.innerHTML = ``
+  selectedSeeds.topSong.forEach((el, i) => {
+    if(seedDiv.getElementsByTagName('span').length >= 5) return
+    const span = document.createElement('span')
+    span.setAttribute('class', 'seed')
+    span.textContent = `  ${el.song}`
+    seedDiv.appendChild(span)
+    span.addEventListener('click', function(){
+      selectedSeeds.topSong = selectedSeeds.topSong.filter(e => e !== el)
+      filterAndDisplaySeeds()
+    })
+  })
+  selectedSeeds.savedSong.forEach((el, i) => {
+    if(seedDiv.getElementsByTagName('span').length >= 5) return
+    const span = document.createElement('span')
+    span.setAttribute('class', 'seed')
+    span.textContent = `  ${el.song}`
+    seedDiv.appendChild(span)
+    span.addEventListener('click', function(){
+      selectedSeeds.savedSong = selectedSeeds.savedSong.filter(e => e !== el)
+      filterAndDisplaySeeds()
+    })
+  })
+  selectedSeeds.artist.forEach((el, i) => {
+    if(seedDiv.getElementsByTagName('span').length >= 5) return
+    const span = document.createElement('span')
+    span.setAttribute('class', 'seed')
+    span.textContent = `  ${el.artist}`
+    seedDiv.appendChild(span)
+    span.addEventListener('click', function(){
+      selectedSeeds.artist = selectedSeeds.artist.filter(e => e !== el)
+      filterAndDisplaySeeds()
+    })
+  })
+  selectedSeeds.genre.forEach((el, i) => {
+    if(seedDiv.getElementsByTagName('span').length >= 5) return
+    const span = document.createElement('span')
+    span.setAttribute('class', 'seed')
+    span.textContent = `  ${el}`
+    seedDiv.appendChild(span)
+    span.addEventListener('click', function(){
+      selectedSeeds.genre = selectedSeeds.genre.filter(e => e !== el)
+      filterAndDisplaySeeds()
+    })
+  })
+  console.log(seedDiv)
+
+  let childSpans = seedDiv.getElementsByTagName('span')
+  for(let i = 0; i < childSpans.length; i++){
+    if (childSpans[i + 1] !== undefined) childSpans[i].textContent += `,`
+
+  }
+}
