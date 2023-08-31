@@ -50,12 +50,14 @@
             <div class="seedsDisplayContainer">
               <p>Seeds:</p>
               <div class="seedsDisplay"></div>
-              <button id="getRecomendationsButton" class="getRecomendationsButton">Get Recommendations</button>
             </div>
-
+            
             <div class="numbersContainer">
               <div class="minMaxRow">
-                <p>Acousticness</p>
+                <div class="buttonAndNameContainer">
+                  <button class="toggleCircle"></button>
+                  <p>Acousticness</p>
+                </div>
                 <div class="minMaxPart">
                   <div class="minMaxEl">
                     <label for="min_acousticness">Min</label>
@@ -71,9 +73,12 @@
                   </div>
                 </div>
             </div>
-
+            
             <div class="minMaxRow">
-              <p>Danceability</p>
+              <div class="buttonAndNameContainer">
+                  <button class="toggleCircle"></button>
+                  <p>Danceability</p>
+                </div>
               <div class="minMaxPart">
                 <div class="minMaxEl">
                   <label for="min_danceability">Min</label>
@@ -89,10 +94,13 @@
                 </div>
               </div>
             </div>
-
+            
               
             <div class="minMaxRow">
-              <p>Energy</p>
+              <div class="buttonAndNameContainer">
+                  <button class="toggleCircle"></button>
+                  <p>Energy</p>
+                </div>
               <div class="minMaxPart">
                 <div class="minMaxEl">
                   <label for="min_energy">Min</label>
@@ -108,45 +116,54 @@
                 </div>
               </div>
             </div>
-
-              <div class="minMaxRow">
+            
+            <div class="minMaxRow">
+              <div class="buttonAndNameContainer">
+                <button class="toggleCircle"></button>
                 <p>Instrumentalness</p>
-                <div class="minMaxPart">
-                  <div class="minMaxEl">
-                    <label for="min_instrumentalness">Min</label>
-                    <input id="min_instrumentalness" class="numberInput" type="number" step="0.1" min="0" max="1"/>
-                  </div>
-                  <div class="minMaxEl">
-                    <label for="max_instrumentalness">Max</label>
-                    <input id="max_instrumentalness" class="numberInput" type="number" step="0.1" min="0" max="1"/>
-                  </div>                
+              </div>
+              <div class="minMaxPart">
+                <div class="minMaxEl">
+                  <label for="min_instrumentalness">Min</label>
+                  <input id="min_instrumentalness" class="numberInput" type="number" step="0.1" min="0" max="1"/>
+                </div>
+                <div class="minMaxEl">
+                  <label for="max_instrumentalness">Max</label>
+                  <input id="max_instrumentalness" class="numberInput" type="number" step="0.1" min="0" max="1"/>
+                </div>                
                   <div class="minMaxEl endEl">
                     <label for="target_instrumentalness">Target</label>
                     <input id="target_instrumentalness" class="numberInput" type="number" step="0.1" min="0" max="1"/>
                   </div>                
                 </div>
               </div>
-
-            <div class="minMaxRow">
-              <p>Key</p>
-              <div class="minMaxPart">
-                <div class="minMaxEl">
-                  <label for="min_key">Min</label>
-                  <input id="min_key" class="numberInput" type="number" step="1" min="0" max="11"/>
+              
+              <div class="minMaxRow">
+                <div class="buttonAndNameContainer">
+                  <button class="toggleCircle"></button>
+                  <p>Key</p>
                 </div>
-                <div class="minMaxEl">
-                  <label for="max_key">Max</label>
-                  <input id="max_key" class="numberInput" type="number" step="1" min="0" max="11"/>
-                </div>                
-                <div class="minMaxEl endEl">
-                  <label for="target_key">Target</label>
-                  <input id="target_key" class="numberInput" type="number" step="1" min="0" max="11"/>
-                </div>                
+                <div class="minMaxPart">
+                  <div class="minMaxEl">
+                    <label for="min_key">Min</label>
+                    <input id="min_key" class="numberInput" type="number" step="1" min="0" max="11"/>
+                  </div>
+                  <div class="minMaxEl">
+                    <label for="max_key">Max</label>
+                    <input id="max_key" class="numberInput" type="number" step="1" min="0" max="11"/>
+                  </div>                
+                  <div class="minMaxEl endEl">
+                    <label for="target_key">Target</label>
+                    <input id="target_key" class="numberInput" type="number" step="1" min="0" max="11"/>
+                  </div>                
               </div>
             </div>
-
+            
             <div class="minMaxRow">
-              <p>Liveness</p>
+              <div class="buttonAndNameContainer">
+                <button class="toggleCircle"></button>
+                <p>Liveness</p>
+              </div>
               <div class="minMaxPart">
                 <div class="minMaxEl">
                   <label for="min_liveness">Min</label>
@@ -162,9 +179,12 @@
                 </div>                
               </div>
             </div>
-
+            
             <div class="minMaxRow">
-              <p>Loudness</p>
+              <div class="buttonAndNameContainer">
+                <button class="toggleCircle"></button>
+                <p>Loudness</p>
+              </div>
               <div class="minMaxPart">
                 <div class="minMaxEl">
                   <label for="min_loudness">Min</label>
@@ -182,7 +202,10 @@
             </div>
               
             <div class="minMaxRow">
-              <p>Mode</p>
+              <div class="buttonAndNameContainer">
+                <button class="toggleCircle"></button>
+                <p>Mode</p>
+              </div>
               <div class="minMaxPart">
                 <div class="minMaxEl">
                   <label for="min_mode">Min</label>
@@ -200,7 +223,10 @@
             </div>
               
             <div class="minMaxRow">
+              <div class="buttonAndNameContainer">
+                <button class="toggleCircle"></button>
                 <p>Popularity</p>
+              </div>
                 <div class="minMaxPart">
                   <div class="minMaxEl">
                     <label for="min_popularity">Min</label>
@@ -216,9 +242,12 @@
                   </div>                
                 </div>
             </div>
-              
+            
             <div class="minMaxRow">
-              <p>Speechiness</p>
+              <div class="buttonAndNameContainer">
+                <button class="toggleCircle"></button>
+                <p>Speechiness</p>
+              </div>
               <div class="minMaxPart">
                 <div class="minMaxEl">
                   <label for="min_speechiness">Min</label>
@@ -236,7 +265,10 @@
             </div>
               
             <div class="minMaxRow">
-              <p>Tempo</p>
+              <div class="buttonAndNameContainer">
+                <button class="toggleCircle"></button>
+                <p>Tempo</p>
+              </div>
               <div class="minMaxPart">
                 <div class="minMaxEl">
                   <label for="min_tempo">Min</label>
@@ -254,25 +286,31 @@
             </div>
               
             <div class="minMaxRow">
-              <p>Time Signiture</p>
+              <div class="buttonAndNameContainer">
+                <button class="toggleCircle"></button>
+                <p>Time Signiture</p>
+              </div>
               <div class="minMaxPart">
                 <div class="minMaxEl">
                   <label for="min_time_signature">Min</label>
-                  <input id="min_time_signature" class="numberInput" type="number" step="0.1" min="0" max="11"/>
+                  <input id="min_time_signature" class="numberInput" type="number" step="1" min="0" max="11"/>
                 </div>
                 <div class="minMaxEl">
                   <label for="max_time_signature">Max</label>
-                  <input id="max_time_signature" class="numberInput" type="number" step="0.1" min="0" max="11"/>
+                  <input id="max_time_signature" class="numberInput" type="number" step="1" min="0" max="11"/>
                 </div>                
                 <div class="minMaxEl endEl">
                   <label for="target_time_signature">Target</label>
-                  <input id="target_time_signature" class="numberInput" type="number" step="0.1" min="0" max="11"/>
+                  <input id="target_time_signature" class="numberInput" type="number" step="1" min="0" max="11"/>
                 </div>                
               </div>
             </div>
-              
+            
             <div class="minMaxRow">
-              <p>Valence</p>
+              <div class="buttonAndNameContainer">
+                <button class="toggleCircle"></button>
+                <p>Valence</p>
+              </div>
               <div class="minMaxPart">
                 <div class="minMaxEl">
                   <label for="min_valence">Min</label>
@@ -288,29 +326,50 @@
                 </div>                
               </div>
             </div>
-
+            
             <div class="minMaxRow">
-              <p>Duration (seconds) </p>
+              <div class="buttonAndNameContainer">
+                <button class="toggleCircle"></button>
+                <p>Duration (seconds) </p>
+              </div>
               <div class="minMaxPart">
                 <div class="minMaxEl">
-                  <label for="min_duration_ms">Min</label>
-                  <input id="min_duration_ms" class="numberInput" type="number" step="1" min="0" max="10000"/>
+                  <label for="min_duration_s">Min</label>
+                  <input id="min_duration_s" class="numberInput" type="number" step="1" min="0" max="1500"/>
                 </div>
                 <div class="minMaxEl">
-                  <label for="max_duration_ms">Max</label>
-                  <input id="max_duration_ms" class="numberInput" type="number" step="1" min="0" max="10000"/>
+                  <label for="max_duration_s">Max</label>
+                  <input id="max_duration_s" class="numberInput" type="number" step="1" min="0" max="1500"/>
                 </div>             
                 <div class="minMaxEl endEl">
-                  <label for="target_duration_ms">Target</label>
-                  <input id="target_duration_ms" class="numberInput" type="number" step="1" min="0" max="10000"/>
+                  <label for="target_duration_s">Target</label>
+                  <input id="target_duration_s" class="numberInput" type="number" step="1" min="0" max="1500"/>
                 </div>                
               </div>
             </div>
 
-            </div>
-
-            <ul id="suggestions" class="suggestions">
-            </ul>
           </div>
-    </body>
+          <div class="presetButtonsContainer">
+            <div class="presetElementContainer">
+              <button id="loadSetupButton" class="loadSetupButton button">Load Preset</button>
+              <select type="text" placeholder="Preset Name" id="presetDropdown">
+                <option value="apple">apple</option>
+              </select>
+            </div>
+            <div class="presetElementContainer">
+              <p class="redText" id="errorNameText" style="display: none;">Use Valid Name</p>
+              <button  id="saveSetupButton" class="saveSetupButton button" >Save Preset</button>
+              <input class="presetInput" id="presetInput" type="text" placeholder="Preset Name">
+            </div>
+          </div>
+          
+          <ul id="suggestions" class="suggestions">
+          </ul>
+        </div>
+        <div class="recommendationsButtonContainer">
+          <button id="getRecomendationsButton" class="getRecomendationsButton button">Get Recommendations</button>
+          <p class="redTextRecommendations" id="redTextRecommendations" style="display: none;">Use At Least 1 Seed!</p>
+        </div>
+        </body>
 </html>
+

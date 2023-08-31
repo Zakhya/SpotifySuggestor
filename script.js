@@ -14,7 +14,8 @@ let selectedSeeds = {
   topSong: [],
   savedSong: [],
   artist: [],
-  genre: []
+  genre: [],
+  seeds: []
 }
 let accessToken
 let profile
@@ -26,8 +27,113 @@ const topArtistsDropdown = document.getElementById('topArtists')
 const savedSongsDropdown = document.getElementById('savedSongs')
 const genresDropdown = document.getElementById('genres')
 const getRecomendationsButton = document.getElementById('getRecomendationsButton')
+const toggleButtons = document.querySelectorAll('.numbersContainer .toggleCircle')
+const minMaxRows = document.querySelectorAll('.numbersContainer .minMaxRow')
+const saveSetupButton = document.getElementById('saveSetupButton')
+const savePresetInput = document.getElementById('presetInput')
+const selectPresetDropdwn = document.getElementById('presetDropdown')
+const errorNameText = document.getElementById('errorNameText')
+const errorRecommendationText = document.getElementById('redTextRecommendations')
+console.log(minMaxRows)
+
+saveSetupButton.addEventListener('click', function(){
+  const name = savePresetInput.value.trim();  // trim() to remove any leading/trailing white spaces
+  console.log('click ran ')
+
+  if(!name) {
+    errorNameText.setAttribute('style', 'display: block;')
+    console.log('no nmae running')
+    return;
+  }
+  
+  if(localStorage.getItem(name)) {
+    const overwrite = confirm("A preset with this name already exists. Do you want to overwrite it?");
+    if (!overwrite) return;
+  }
+
+  try {
+    localStorage.setItem(name, JSON.stringify(selectedSeeds));
+    alert('Saved successfully!');
+  } catch (e) {
+    console.error('Failed to save to local storage', e);
+    alert('Failed to save. Storage might be full.');
+  }
+  errorNameText.setAttribute('style', 'display: none;')
+})
+
+toggleButtons.forEach((e, i) => {
+  e.isActive = false
+  e.addEventListener('click', function(){
+    let minMaxRowIputs = minMaxRows[i].querySelectorAll('.numberInput')
+    let [min, max, target] = [minMaxRowIputs[0], minMaxRowIputs[1], minMaxRowIputs[2]]
+    if(e.isActive === false){
+      e.setAttribute('class', 'toggleCircle toggleCircleActive')
+      e.isActive = true
+      minMaxRows[i].setAttribute('class', 'minMaxRow minMaxRowActive')
+      console.log(min, max, target)
+      console.log(min.id)
+      if(min.id === 'min_acousticness' || min.id === 'min_danceability' || min.id === 'min_energy' || min.id === 'min_instrumentalness' 
+      || min.id === 'min_liveness' || min.id === 'min_loudness' || min.id === 'min_mode' || min.id === 'min_speechiness' || min.id === 'min_valence' || min.id === 'min_mode'){
+        min.value = 0
+        selectedSeeds.seeds.push({
+          name: min.id,
+          value: 0
+        })
+        console.log(selectedSeeds)
+      }
+      if(max.id === 'max_acousticness' || max.id === 'max_danceability' || max.id === 'max_energy' || max.id === 'max_instrumentalness' || max.id === 'max_liveness' 
+      || max.id === 'max_loudness' || max.id === 'max_mode' || max.id === 'max_speechiness' || max.id === 'max_valence' || max.id === 'max_mode'){
+        max.value = 1
+        selectedSeeds.seeds.push({
+          name: max.id,
+          value: 1
+        })
+      }
+      if(target.id === 'target_acousticness' || target.id === 'target_danceability' || target.id === 'target_energy' || target.id === 'target_instrumentalness' 
+      || target.id === 'target_liveness' || target.id === 'target_loudness' || target.id === 'target_mode' || target.id === 'target_speechiness' || target.id === 'target_valence'){
+        target.value = 0.5
+        selectedSeeds.seeds.push({
+          name: target.id,
+          value: 0.5
+        })
+      }
+      if (target.id === 'target_mode') target.value = 1, selectedSeeds.seeds.push({name: target.id, value: 1})
+      if(min.id === 'min_key') min.value = 0, selectedSeeds.seeds.push({name: min.id, value: 0})
+      if(max.id === 'max_key') max.value = 11, selectedSeeds.seeds.push({name: max.id, value: 11})
+      if(target.id === 'target_key') target.value = 0, selectedSeeds.seeds.push({name: target.id, value: 0})
+      
+      if(min.id === 'min_popularity') min.value = 0, selectedSeeds.seeds.push({name: min.id, value: 0})
+      if(max.id === 'max_popularity') max.value = 100, selectedSeeds.seeds.push({name: max.id, value: 100})
+      if(target.id === 'target_popularity') target.value = 50, selectedSeeds.seeds.push({name: target.id, value: 50})
+      
+      if(min.id === 'min_tempo') min.value = 30, selectedSeeds.seeds.push({name: min.id, value: 30})
+      if(max.id === 'max_tempo') max.value = 250, selectedSeeds.seeds.push({name: max.id, value: 250})
+      if(target.id === 'target_tempo') target.value =  130, selectedSeeds.seeds.push({name: target.id, value: 130})
+      
+      if(min.id === 'min_time_signature') min.value = 0, selectedSeeds.seeds.push({name: min.id, value: 0})
+      if(max.id === 'max_time_signature') max.value = 11, selectedSeeds.seeds.push({name: max.id, value: 11})
+      if(target.id === 'target_time_signature') target.value =  4, selectedSeeds.seeds.push({name: target.id, value: 4})
+      
+      if(min.id === 'min_duration_s') min.value = 0, selectedSeeds.seeds.push({name: min.id, value: 0})
+      if(max.id === 'max_duration_s') max.value = 1500, selectedSeeds.seeds.push({name: max.id, value: 1500})
+      if(target.id === 'target_duration_s') target.value =  150, selectedSeeds.seeds.push({name: target.id, value: 150})
+      
+    } else {
+      e.setAttribute('class', 'toggleCircle')
+      e.isActive = false
+      minMaxRows[i].setAttribute('class', 'minMaxRow')
+      min.value = ''
+      max.value = ''
+      target.value = ''
+    }
+  })
+})
 
 getRecomendationsButton.addEventListener('click', async function(){
+  if(!selectedSeeds.artist.length && !selectedSeeds.topSong.length && !selectedSeeds.savedSong.length && !selectedSeeds.genre.length){
+    errorRecommendationText.setAttribute('style', 'display: block;')
+    return;
+  }
   console.log('selectedSeeds:', selectedSeeds);
   let recomendations = await get50Recommendations(accessToken, selectedSeeds)
   console.log(recomendations)

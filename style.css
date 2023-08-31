@@ -133,13 +133,25 @@
   display: flex;
   justify-content: space-evenly;
   flex-direction: column;
+  margin-bottom: 15px;
+  background-color: #404752;
+  color: #9aa1a6;
 }
 .numbersContainer .minMaxRow:nth-child(odd) {
+  background-color: #697580;
+}
+.numbersContainer .minMaxRowActive:nth-child(odd) {
   background-color: #526D82;
+  color: #DDE6ED;
+}
+.numbersContainer .minMaxRowActive:nth-child(even) {
+  background-color: #27374D;
+  color: #DDE6ED;
 }
 
 .numberInput{
   max-width: 50px;
+
 }
 
 .minMaxPart{
@@ -148,17 +160,85 @@
 .minMaxEl{
   margin-right: 16vw;
 }
-.minMaxRow{
+.minMaxRow {
+  box-sizing: border-box;
   display: flex;
   justify-content: space-between;
-  padding-block:3.55px;
+  padding-block: 3.55px;
+  transition: border-top 0.5s, border-bottom 0.5s;
+  border-bottom: solid 1px transparent;
+  border-top: solid 1px transparent;
+}
+
+.minMaxRowActive {
   border-bottom: solid 1px #50c9d9;
 }
-.minMaxRow:nth-child(1){
+
+.minMaxRowActive:first-of-type {
   border-top: solid 1px #50c9d9;
+}
+.minMaxRowActive:last-of-type {
+  border-bottom: solid 1px #50c9d9;
 }
 .endEl{
   margin-right: 0px;
+}
+.buttonAndNameContainer{
+  display: flex;
+  align-items: center;
+}
+.toggleCircle{
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-inline: 5px 10px;
+}
+.toggleCircleActive{
+  background-color: #50c9d9;
+  transition: background-color 0.3s;
+}
+
+.presetButtonsContainer{
+  display: flex;
+  justify-content: space-between;
+}
+.presetElementContainer{
+  display: flex;
+  align-items: center;
+}
+.recommendationsButtonContainer{
+  text-align: center;
+}
+.redText{
+  color: red;
+  margin-right: 15px;
+}
+.redTextRecommendations{
+  color: red;
+}
+
+.button{
+  height: 25px;
+  padding-inline: 10px;
+  border-radius: 5px;
+}
+.getRecomendationsButton{
+  height: 50px;
+  padding-inline: 20px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 550;
+}
+select{
+  border-radius: 5px;
+}
+input{
+  border-radius: 5px;
+  
 }
 
 @media (max-width: 893px){
