@@ -34,10 +34,112 @@ const savePresetInput = document.getElementById('presetInput')
 const selectPresetDropdwn = document.getElementById('presetDropdown')
 const errorNameText = document.getElementById('errorNameText')
 const errorRecommendationText = document.getElementById('redTextRecommendations')
-console.log(minMaxRows)
+const successNameText = document.getElementById('successNameText')
+const savedPresetDropdown = document.getElementById('presetDropdown')
+
+const prefix = "spotifyAppSave:";
+let appData = {};
+
+for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+
+    if (key.startsWith(prefix)) {
+        let el = document.createElement('option')
+        appData[key] = JSON.parse(localStorage.getItem(key));
+
+        const name = key.replace(prefix, "");
+        el.value = name;
+        el.innerText = name; 
+        savedPresetDropdown.appendChild(el);
+    }
+
+}
+
+savedPresetDropdown.addEventListener('change', function(event){
+  const selectedValue = event.target.value
+  const item = localStorage.getItem(`spotifyAppSave:${selectedValue}`)
+  selectedSeeds = JSON.parse(item)
+  console.log("selected seeeds",selectedSeeds)
+  let p = 0;
+
+for (let i = 0; i < selectedSeeds.seeds.length;i++){
+  let minMaxRowInputs = minMaxRows[i].querySelectorAll('.numberInput');
+  let [min, max, target] = [minMaxRowInputs[0], minMaxRowInputs[1], minMaxRowInputs[2]];
+  for(let j = 0; j < selectedSeeds.seeds.length; j++){
+    if(selectedSeeds.seeds[j].name === 'min_acousticness' && i === 0){
+      min.value = selectedSeeds.seeds[j].value;
+    }
+    if(selectedSeeds.seeds[j].name === 'max_acousticness' && i === 0){
+        max.value = selectedSeeds.seeds[j].value
+    }
+    if(selectedSeeds.seeds[j].name === 'target_acousticness' && i === 0){
+        target.value = selectedSeeds.seeds[j].value
+    }
+    if(selectedSeeds.seeds[j].name === 'min_danceability' && i === 1){
+      min.value = selectedSeeds.seeds[j].value;
+    }
+    if(selectedSeeds.seeds[j].name === 'max_danceability' && i === 1){
+        max.value = selectedSeeds.seeds[j].value
+    }
+    if(selectedSeeds.seeds[j].name === 'target_danceability' && i === 1){
+        target.value = selectedSeeds.seeds[j].value
+    }
+    if(selectedSeeds.seeds[j].name === 'min_energy' && i === 2){
+      min.value = selectedSeeds.seeds[j].value;
+    }
+    if(selectedSeeds.seeds[j].name === 'max_energy' && i === 2){
+        max.value = selectedSeeds.seeds[j].value
+    }
+    if(selectedSeeds.seeds[j].name === 'target_energy' && i === 2){
+        target.value = selectedSeeds.seeds[j].value
+    }
+
+  }
+}
+
+
+
+  // selectedSeeds.seeds.forEach((e, i) => {
+  //     if ((i) % 3 === 0 && i !== 0) {
+  //         p++;
+  //     }
+      
+  //     console.log("e.name", e.name);
+
+  //     if(p === 0) return
+  //     if(e.name === 'min_danceability' && p === 1){
+  //         min.value = e.value;
+  //     }
+  //     if(e.name === 'max_danceability' && p === 1){
+  //         max.value = e.value;
+  //     }
+  //     if(e.name === 'target_danceability' && p === 1){
+  //         target.value = e.value;
+  //     }
+  //     if(p === 1) return
+  //     if(e.name === 'min_energy' && p === 2){
+  //         min.value = e.value;
+  //     }
+  //     if(e.name === 'max_energy' && p === 2){
+  //         max.value = e.value;
+  //     }
+  //     if(e.name === 'target_energy' && p === 2){
+  //         target.value = e.value;
+  //     }
+  //     if(p === 2) return
+  
+  //     // Increment p every time i is divisible by 3 and i is not 0
+  // });
+  filterAndDisplaySeeds()
+})
+
+savePresetInput.addEventListener('input', function(){
+  errorNameText.setAttribute('style', 'display: none;')
+  successNameText.setAttribute('style', 'display: none;')
+})
 
 saveSetupButton.addEventListener('click', function(){
-  const name = savePresetInput.value.trim();  // trim() to remove any leading/trailing white spaces
+  const name = savePresetInput.value.trim();
   console.log('click ran ')
 
   if(!name) {
@@ -46,14 +148,14 @@ saveSetupButton.addEventListener('click', function(){
     return;
   }
   
-  if(localStorage.getItem(name)) {
+  if(localStorage.getItem(`spotifyAppSave:${name}`)) {
     const overwrite = confirm("A preset with this name already exists. Do you want to overwrite it?");
     if (!overwrite) return;
   }
 
   try {
-    localStorage.setItem(name, JSON.stringify(selectedSeeds));
-    alert('Saved successfully!');
+    localStorage.setItem(`spotifyAppSave:${name}`, JSON.stringify(selectedSeeds));
+    successNameText.setAttribute('style', 'display: block;')
   } catch (e) {
     console.error('Failed to save to local storage', e);
     alert('Failed to save. Storage might be full.');
@@ -71,15 +173,15 @@ toggleButtons.forEach((e, i) => {
       e.isActive = true
       minMaxRows[i].setAttribute('class', 'minMaxRow minMaxRowActive')
       console.log(min, max, target)
-      console.log(min.id)
       if(min.id === 'min_acousticness' || min.id === 'min_danceability' || min.id === 'min_energy' || min.id === 'min_instrumentalness' 
       || min.id === 'min_liveness' || min.id === 'min_loudness' || min.id === 'min_mode' || min.id === 'min_speechiness' || min.id === 'min_valence' || min.id === 'min_mode'){
         min.value = 0
-        selectedSeeds.seeds.push({
-          name: min.id,
-          value: 0
-        })
-        console.log(selectedSeeds)
+        if(min.id in selectedSeeds.seeds){
+          selectedSeeds.seeds.push({
+            name: min.id,
+            value: 0
+          })
+        }
       }
       if(max.id === 'max_acousticness' || max.id === 'max_danceability' || max.id === 'max_energy' || max.id === 'max_instrumentalness' || max.id === 'max_liveness' 
       || max.id === 'max_loudness' || max.id === 'max_mode' || max.id === 'max_speechiness' || max.id === 'max_valence' || max.id === 'max_mode'){
@@ -117,7 +219,8 @@ toggleButtons.forEach((e, i) => {
       if(min.id === 'min_duration_s') min.value = 0, selectedSeeds.seeds.push({name: min.id, value: 0})
       if(max.id === 'max_duration_s') max.value = 1500, selectedSeeds.seeds.push({name: max.id, value: 1500})
       if(target.id === 'target_duration_s') target.value =  150, selectedSeeds.seeds.push({name: target.id, value: 150})
-      
+      e.setActive = true
+    console.log(selectedSeeds)
     } else {
       e.setAttribute('class', 'toggleCircle')
       e.isActive = false
@@ -125,6 +228,43 @@ toggleButtons.forEach((e, i) => {
       min.value = ''
       max.value = ''
       target.value = ''
+
+      if(min.id === 'min_acousticness' || min.id === 'min_danceability' || min.id === 'min_energy' || min.id === 'min_instrumentalness' 
+      || min.id === 'min_liveness' || min.id === 'min_loudness' || min.id === 'min_mode' || min.id === 'min_speechiness' || min.id === 'min_valence' || min.id === 'min_mode'){
+        min.value = ''
+        selectedSeeds.seeds = selectedSeeds.seeds.filter(a => a.name !== min.id)
+      }
+      if(max.id === 'max_acousticness' || max.id === 'max_danceability' || max.id === 'max_energy' || max.id === 'max_instrumentalness' || max.id === 'max_liveness' 
+      || max.id === 'max_loudness' || max.id === 'max_mode' || max.id === 'max_speechiness' || max.id === 'max_valence' || max.id === 'max_mode'){
+        max.value = ''
+        selectedSeeds.seeds = selectedSeeds.seeds.filter(a => a.name !== max.id)
+      }
+      if(target.id === 'target_acousticness' || target.id === 'target_danceability' || target.id === 'target_energy' || target.id === 'target_instrumentalness' 
+      || target.id === 'target_liveness' || target.id === 'target_loudness' || target.id === 'target_mode' || target.id === 'target_speechiness' || target.id === 'target_valence'){
+        target.value = ''
+        selectedSeeds.seeds = selectedSeeds.seeds.filter(a => a.name !== target.id)
+      }
+      if (target.id === 'target_mode') target.value = '', selectedSeeds.seeds = selectedSeeds.seeds.filter(a => a.name !== target.id)
+      if(min.id === 'min_key') min.value = '', selectedSeeds.seeds = selectedSeeds.seeds.filter(a => a.name !== min.id)
+      if(max.id === 'max_key') max.value = '', selectedSeeds.seeds = selectedSeeds.seeds.filter(a => a.name !== max.id)
+      if(target.id === 'target_key') target.value = '', selectedSeeds.seeds = selectedSeeds.seeds.filter(a => a.name !== target.id)
+      
+      if(min.id === 'min_popularity') min.value = '', selectedSeeds.seeds = selectedSeeds.seeds.filter(a => a.name !== min.id)
+      if(max.id === 'max_popularity') max.value = '', selectedSeeds.seeds = selectedSeeds.seeds.filter(a => a.name !== max.id)
+      if(target.id === 'target_popularity') target.value = '', selectedSeeds.seeds = selectedSeeds.seeds.filter(a => a.name !== target.id)
+      
+      if(min.id === 'min_tempo') min.value = '', selectedSeeds.seeds = selectedSeeds.seeds.filter(a => a.name !== min.id)
+      if(max.id === 'max_tempo') max.value = '', selectedSeeds.seeds = selectedSeeds.seeds.filter(a => a.name !== max.id)
+      if(target.id === 'target_tempo') target.value =  '', selectedSeeds.seeds = selectedSeeds.seeds.filter(a => a.name !== target.id)
+      
+      if(min.id === 'min_time_signature') min.value = '', selectedSeeds.seeds = selectedSeeds.seeds.filter(a => a.name !== min.id)
+      if(max.id === 'max_time_signature') max.value = '', selectedSeeds.seeds = selectedSeeds.seeds.filter(a => a.name !== max.id)
+      if(target.id === 'target_time_signature') target.value =  '', selectedSeeds.seeds = selectedSeeds.seeds.filter(a => a.name !== target.id)
+      
+      if(min.id === 'min_duration_s') min.value = '', selectedSeeds.seeds = selectedSeeds.seeds.filter(a => a.name !== min.id)
+      if(max.id === 'max_duration_s') max.value = '', selectedSeeds.seeds = selectedSeeds.seeds.filter(a => a.name !== max.id)
+      if(target.id === 'target_duration_s') target.value =  '', selectedSeeds.seeds = selectedSeeds.seeds.filter(a => a.name !== target.id)
+      console.log(selectedSeeds)
     }
   })
 })
@@ -379,6 +519,10 @@ function filterAndDisplaySeeds(){
   let childSpans = seedDiv.getElementsByTagName('span')
   for(let i = 0; i < childSpans.length; i++){
     if (childSpans[i + 1] !== undefined) childSpans[i].textContent += `,`
+  }
 
+  if(childSpans.length){
+    getRecomendationsButton.disabled = false;
+    errorRecommendationText.setAttribute('style', 'display: none;')
   }
 }
