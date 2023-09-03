@@ -336,6 +336,27 @@ export async function get50Recommendations(token, selectedSeeds) {
   
   return await result.json();
   }
+
+  export async function addSelectedSongsToPlaylist(playlistId, trackUris, token){
+    const url = `https://api.spotify.com/v1/playlists/${playlistId}/tracks`
+
+    let finalUri = trackUris.join(',')
+    console.log(finalUri)
+
+    const response = await fetch(url, {
+        method: "POST",
+        headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          uris: trackUris
+      })
+    });
+  
+    const data = await response.json();
+    return data;  // This will return the ID of the newly created playlist.
+  }
   
   // async function createPlaylist(token) {
   //   const requestBody = {

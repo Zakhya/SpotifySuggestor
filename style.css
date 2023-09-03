@@ -134,7 +134,6 @@
   display: flex;
   justify-content: space-evenly;
   flex-direction: column;
-  margin-bottom: 15px;
   background-color: #404752;
   color: #9aa1a6;
 }
@@ -204,10 +203,14 @@
 }
 
 .presetButtonsContainer{
+  display: none;
+  width: 95%;
+  margin: auto;
   display: flex;
   justify-content: space-between;
 }
 .presetElementContainer{
+  margin-block: 15px;
   display: flex;
   align-items: center;
 }
@@ -243,7 +246,21 @@ select{
 }
 input{
   border-radius: 5px;
-  
+}
+.presetInput{
+  max-width: 100px;
+}
+
+.playlistDropdownAndAddButton{
+  margin-block: 15px;
+  padding-bottom: 15px;
+  width: 95%;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+}
+#playlistDropdown{
+  max-width: 100px;
 }
 
 @media (max-width: 893px){
