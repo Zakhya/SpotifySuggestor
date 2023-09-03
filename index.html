@@ -375,11 +375,14 @@
           <div>
             <button class="button" id="selectAllSongsButton">Selected All Songs</button>
           </div>
-          <div>
+          <div class="playlistSelectorContainer">
+            <input type="text" placeholder="New Playlist Name" id="newPlaylistNameField">
             <label for="playlistDropdown">select playlist</label>
             <select id="playlistDropdown">
-              <option value="none">none</option>
+              <option value="new">Add New Playlist</option>
             </select>
+            <span>Public</span>
+            <button class="toggleCircle" id="isPublicButton"></button>
           </div>
           <div>
             <button class="button" id="addToPlaylistButton">Add Selected Songs</button>

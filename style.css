@@ -262,7 +262,10 @@ input{
 #playlistDropdown{
   max-width: 100px;
 }
-
+.playlistSelectorContainer{
+  display: flex;
+  align-items: center;
+}
 @media (max-width: 893px){
   .cardContainer {
     flex-basis: calc(33% - 17px);

@@ -47,7 +47,6 @@ export async function get50Recommendations(token, selectedSeeds) {
     let firstArtist = true
     let firstGenre = true
     let firstTrack = true
-    console.log('selectedSeeds', selectedSeeds)
     selectedSeeds.artist.forEach(el => {
       if(firstArtist){
         url += `&seed_artists=${el.id}`
@@ -58,7 +57,6 @@ export async function get50Recommendations(token, selectedSeeds) {
          selectedSeeds.artist = selectedSeeds.artist.filter(item => item !== el)
        }
      })
-     console.log('selectedSeeds:', selectedSeeds);
    
     selectedSeeds.genre.forEach(el => {
       if(firstGenre){
@@ -70,7 +68,6 @@ export async function get50Recommendations(token, selectedSeeds) {
          selectedSeeds.genre = selectedSeeds.genre.filter(item => item !== el)
        }
      })
-     console.log('selectedSeeds:', selectedSeeds);
    
      selectedSeeds.topSong.forEach(el => {
        if(firstTrack){
@@ -83,7 +80,6 @@ export async function get50Recommendations(token, selectedSeeds) {
           selectedSeeds.topSong = selectedSeeds.topSong.filter(item => item !== el)
         }
       })
-      console.log('selectedSeeds:', selectedSeeds);
    
      selectedSeeds.savedSong.forEach(el => {
        if(firstTrack){
@@ -92,7 +88,6 @@ export async function get50Recommendations(token, selectedSeeds) {
          firstTrack = false
         } else {
           url += `,${el.id}`
-          console.log('selectedSeeds', selectedSeeds.artist)
           selectedSeeds.savedSong = selectedSeeds.savedSong.filter(item => item !== el)
         }
       })
@@ -116,8 +111,6 @@ export async function get50Recommendations(token, selectedSeeds) {
         url += `&target_danceability=${danceabilityInputTarget.value}`
       }
       
-      ////////
-      // DURATION
       if(duration_sInputMin.value !== ''){
         url += `&min_duration_s=${duration_sInputMin.value * 1000}`
       }
@@ -127,8 +120,6 @@ export async function get50Recommendations(token, selectedSeeds) {
       if(duration_sInputTarget.value !== ''){
         url += `&target_duration_s=${duration_sInputTarget.value * 1000}`
       }
-
-      ////////
 
       if(energyInputMin.value !== ''){
         url += `&min_energy=${energyInputMin.value}`
@@ -242,8 +233,6 @@ export async function get50Recommendations(token, selectedSeeds) {
 
 
      const testURL = 'https://api.spotify.com/v1/recommendations?seed_artists=4NHQUGzhtTLFvgF5SZesLK&seed_genres=classical%2Ccountry&seed_tracks=0c6xIDDpzE81m2q797ordA&min_acousticness=0.1&max_acousticness=1.0&target_acousticness=0.5&min_danceability=0.1&max_danceability=1.0&target_danceability=0.5&min_energy=0.1&max_energy=1.0&target_energy=0.5&target_time_signature=4&min_valence=0.1&max_valence=1.0&target_valence=0.5'
-     console.log(url)
-     console.log('selectedSeeds:', selectedSeeds);
    
      const result = await fetch(url, {
        method: "GET", headers: { Authorization: `Bearer ${token}` }
@@ -297,7 +286,7 @@ export async function get50Recommendations(token, selectedSeeds) {
    
          } catch (error) {
              console.error("Failed to fetch songs:", error);
-             shouldContinueFetching = false; // Stop the loop in case of an error
+             shouldContinueFetching = false; 
          }
      }
    
@@ -340,9 +329,6 @@ export async function get50Recommendations(token, selectedSeeds) {
   export async function addSelectedSongsToPlaylist(playlistId, trackUris, token){
     const url = `https://api.spotify.com/v1/playlists/${playlistId}/tracks`
 
-    let finalUri = trackUris.join(',')
-    console.log(finalUri)
-
     const response = await fetch(url, {
         method: "POST",
         headers: {
@@ -355,8 +341,28 @@ export async function get50Recommendations(token, selectedSeeds) {
     });
   
     const data = await response.json();
-    return data;  // This will return the ID of the newly created playlist.
+    return data;
   }
+
+  export async function makeNewPlaylistBeforeAddSongs(user_id, playlistName, isPublic, token){
+    const url = `https://api.spotify.com/v1/users/${user_id}/playlists`
+
+    const response = await fetch(url, {
+        method: "POST",
+        headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: playlistName,
+          public: isPublic
+      })
+    });
+  
+    const data = await response.json();
+    console.log(data)
+    return data;
+  } 
   
   // async function createPlaylist(token) {
   //   const requestBody = {

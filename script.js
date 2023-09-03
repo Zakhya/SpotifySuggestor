@@ -1,5 +1,5 @@
 import { getAccessToken, redirectToAuthCodeFlow} from "./verify";
-import { get50Recommendations, getGenres, fetchAllSavedSongs, fetchTop50Songs, fetchTop50Artists, fetchProfile, fetchPlaylists, addSelectedSongsToPlaylist } from "./asyncCalls";
+import { makeNewPlaylistBeforeAddSongs, get50Recommendations, getGenres, fetchAllSavedSongs, fetchTop50Songs, fetchTop50Artists, fetchProfile, fetchPlaylists, addSelectedSongsToPlaylist } from "./asyncCalls";
 const clientId = "6fd7da8323b5478aafa52dc629d650f4"; // Replace with your client ID
 const params = new URLSearchParams(window.location.search);
 const code = params.get("code");
@@ -18,6 +18,7 @@ let selectedSeeds = {
 }
 let selectedSongsforPlaylist = []
 let selectedPlaylistID, playlists, savedSongs, top50SongsRes, top50ArtistsRes, genreSeeds, accessToken, profile
+let isPublic = false
 
 let seedDiv = document.querySelector('.seedsDisplay')
 const genresToListButton = document.querySelector('.submitButton');
@@ -38,6 +39,9 @@ const loadPresetDropdown = document.getElementById('presetDropdown')
 const playlistDropdown = document.querySelector('#playlistDropdown')
 const selectAllSongsButton = document.querySelector('#selectAllSongsButton')
 const addToPlaylistButton = document.querySelector('#addToPlaylistButton')
+const newPlaylistNameField = document.querySelector('#newPlaylistNameField')
+const isPublicButton = document.querySelector('#isPublicButton')
+
 
 
 if (!code) {
@@ -52,7 +56,6 @@ if (!code) {
     top50ArtistsRes = await fetchTop50Artists(accessToken)
     genreSeeds = await getGenres(accessToken)
     savedSongs = await fetchAllSavedSongs(accessToken)
-    console.log(top50ArtistsRes)
 
     genreSeeds.genres.forEach(el => {
       genres.push(el)
@@ -96,12 +99,37 @@ let appData = {};
 //   populateUI()
 // })
 
-addToPlaylistButton.addEventListener('click', async e => {
-  let res = await addSelectedSongsToPlaylist(selectedPlaylistID, selectedSongsforPlaylist, accessToken)
-  console.log(res)
+isPublicButton.addEventListener('click', e => {
+  if(isPublic === false){
+    e.target.setAttribute('class', "toggleCircle toggleCircleActive")
+    isPublic = true
+  } else {
+    isPublic = false
+    e.target.setAttribute('class', "toggleCircle")
+  }
+})
+
+addToPlaylistButton.addEventListener('click', async e => {  
+  if(playlistDropdown.value === 'new'){
+    let name = newPlaylistNameField.value
+    console.log(name)
+    const res = await makeNewPlaylistBeforeAddSongs(userID, name, isPublic, accessToken)
+    console.log(res)
+    let playlistID = res.id
+    let addToPlaylistRes = await addSelectedSongsToPlaylist(playlistID, selectedSongsforPlaylist, accessToken)
+    console.log(addToPlaylistRes)
+  } else {
+    let res = await addSelectedSongsToPlaylist(selectedPlaylistID, selectedSongsforPlaylist, accessToken)
+    console.log(res)
+}
 })
 
 playlistDropdown.addEventListener('change', e => {
+  if(e.target.value === 'new'){
+    newPlaylistNameField.setAttribute('style', 'display: inline-block;')
+  } else {
+    newPlaylistNameField.setAttribute('style', 'display: none;')
+  }
   let playlistItem = playlists.items.filter(a => a.name !== e.value)
   selectedPlaylistID = playlistItem[0].id;
 })
@@ -126,8 +154,7 @@ for (let i = 0; i < localStorage.length; i++) {
     const selectedValue = event.target.value
     const item = localStorage.getItem(`spotifyAppSave:${selectedValue}`)
     selectedSeeds = JSON.parse(item)
-    console.log("selected seeeds",selectedSeeds)
-    
+     
     const seedMap = {
       'min_acouticness': { type: 'min', index: 0 },
       'max_acouticness': { type: 'max', index: 0 },
@@ -221,12 +248,10 @@ AllNumberInputs.forEach(e => {
         name: e.id,
         value: e.value
       })
-      console.log('logged new value')
     } else {
       let index = selectedSeeds.seeds.findIndex(a => a.name === e.id)
 
       selectedSeeds.seeds[index].value = e.value;
-      console.log(selectedSeeds)
     }
   })
 })
@@ -240,11 +265,9 @@ savePresetInput.addEventListener('input', function(){
 
 saveSetupButton.addEventListener('click', function(){
   const name = savePresetInput.value.trim();
-  console.log('click ran ')
 
   if(!name) {
     errorNameText.setAttribute('style', 'display: block;')
-    console.log('no nmae running')
     return;
   }
   
@@ -272,7 +295,6 @@ toggleButtons.forEach((e, i) => {
       e.setAttribute('class', 'toggleCircle toggleCircleActive')
       e.isActive = true
       minMaxRows[i].setAttribute('class', 'minMaxRow minMaxRowActive')
-      console.log(min, max, target)
       if(min.id === 'min_acousticness' || min.id === 'min_danceability' || min.id === 'min_energy' || min.id === 'min_instrumentalness' 
       || min.id === 'min_liveness' || min.id === 'min_loudness' || min.id === 'min_mode' || min.id === 'min_speechiness' || min.id === 'min_valence' || min.id === 'min_mode'){
         min.value = 0
@@ -362,7 +384,6 @@ toggleButtons.forEach((e, i) => {
       if(min.id === 'min_duration_s') min.value = '', selectedSeeds.seeds = selectedSeeds.seeds.filter(a => a.name !== min.id)
       if(max.id === 'max_duration_s') max.value = '', selectedSeeds.seeds = selectedSeeds.seeds.filter(a => a.name !== max.id)
       if(target.id === 'target_duration_s') target.value =  '', selectedSeeds.seeds = selectedSeeds.seeds.filter(a => a.name !== target.id)
-      console.log(selectedSeeds)
     }
   })
 })
@@ -373,7 +394,6 @@ getRecomendationsButton.addEventListener('click', async function(){
     errorRecommendationText.setAttribute('style', 'display: block;')
     return;
   }
-  console.log('selectedSeeds:', selectedSeeds);
   let recomendations = await get50Recommendations(accessToken, selectedSeeds)
   let dropdownAndButtonContainer = document.getElementById('playlistDropdownAndAddButton')
   dropdownAndButtonContainer.setAttribute('style', 'display: flex;')
@@ -490,7 +510,6 @@ function populateUI(profile) {
         cardContainer.style.backgroundColor = "#526D82"
         liEl.activated = false
       }
-      console.log(selectedSongsforPlaylist)
     })
     let nameEl = document.createElement('span')
     let artistEl = document.createElement('span')
@@ -573,7 +592,6 @@ function filterAndDisplaySeeds(){
       filterAndDisplaySeeds()
     })
   })
-  console.log(seedDiv)
 
   let childSpans = seedDiv.getElementsByTagName('span')
   for(let i = 0; i < childSpans.length; i++){
